@@ -52,7 +52,7 @@
   nav{max-width:var(--max);margin:0 auto;padding:22px 32px;display:flex;align-items:center;justify-content:space-between;}
   .logo{font-family:'Cormorant Garamond',serif;font-size:26px;letter-spacing:0.12em;text-transform:uppercase;color:#000;}
   .nav-links{display:flex;gap:34px;list-style:none;}
-  .nav-links a{font-size:13px;letter-spacing:0.05em;text-transform:uppercase;color:#000;position:relative;padding-bottom:4px;transition:opacity 0.25s;}
+  .nav-links a{font-size:13px;letter-spacing:0.05em;text-transform:uppercase;color:#000;position:relative;padding-bottom:4px;transition:opacity 1s;}
   .nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--gold);transition:width 0.3s;}
   .nav-links a:hover::after{width:100%;}
   .menu-toggle{display:none;background:none;border:none;font-size:24px;cursor:pointer;color:inherit;}
