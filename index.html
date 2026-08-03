@@ -1,1670 +1,275 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lumina Salon</title>
-  <meta name="description" content="Lumina Salon — hair, beauty & styling crafted for your best look." />
-
-  <style>
-    :root{
-      --bg: #070A12;
-      --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.09);
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.68);
-      --muted2: rgba(255,255,255,.55);
-      --line: rgba(255,255,255,.12);
-      --shadow: 0 22px 60px rgba(0,0,0,.45);
-      --shadow2: 0 12px 30px rgba(0,0,0,.35);
-      --brand1: #7C3AED; /* violet */
-      --brand2: #22D3EE; /* cyan */
-      --brand3: #F97316; /* orange */
-      --good: #34D399;
-      --radius-xl: 28px;
-      --radius-lg: 18px;
-      --radius-md: 14px;
-      --radius-sm: 10px;
-      --max: 1120px;
-      --gap: 18px;
-      --focus: 0 0 0 4px rgba(34,211,238,.25), 0 0 0 1px rgba(34,211,238,.35);
-      --ease: cubic-bezier(.2,.9,.2,1);
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-    }
-
-    *{ box-sizing: border-box; }
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: var(--sans);
-      background:
-        radial-gradient(900px 500px at 10% -10%, rgba(124,58,237,.35), transparent 55%),
-        radial-gradient(700px 420px at 85% 0%, rgba(34,211,238,.28), transparent 55%),
-        radial-gradient(680px 520px at 60% 115%, rgba(249,115,22,.22), transparent 55%),
-        linear-gradient(180deg, #070A12 0%, #070A12 30%, #060814 100%);
-      color: var(--text);
-      overflow-x:hidden;
-    }
-
-    a{ color: inherit; text-decoration:none; }
-    button{ font-family: inherit; }
-
-    /* Layout */
-    .container{
-      width: min(var(--max), calc(100% - 40px));
-      margin: 0 auto;
-    }
-
-    /* Top Nav */
-    .nav{
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      background: linear-gradient(180deg, rgba(7,10,18,.85), rgba(7,10,18,.62));
-    }
-
-    .nav-inner{
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      padding: 14px 0;
-      gap: 14px;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap: 12px;
-      min-width: 200px;
-    }
-    .logo{
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      background:
-        radial-gradient(12px 12px at 25% 30%, rgba(255,255,255,.85), rgba(255,255,255,0) 60%),
-        linear-gradient(135deg, rgba(124,58,237,1), rgba(34,211,238,1));
-      box-shadow: 0 12px 40px rgba(124,58,237,.25);
-      position: relative;
-      overflow:hidden;
-      border: 1px solid rgba(255,255,255,.18);
-    }
-    .logo:after{
-      content:"";
-      position:absolute;
-      inset:-40%;
-      background: conic-gradient(from 180deg, rgba(255,255,255,.0), rgba(255,255,255,.35), rgba(255,255,255,0));
-      transform: rotate(25deg);
-      animation: shimmer 6s var(--ease) infinite;
-      opacity:.7;
-    }
-    @keyframes shimmer{
-      0%{ transform: translateX(-20%) rotate(25deg); opacity:.2; }
-      40%{ opacity:.8; }
-      100%{ transform: translateX(20%) rotate(25deg); opacity:.2; }
-    }
-
-    .brand h1{
-      margin:0;
-      font-size: 14px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.88);
-      line-height: 1.1;
-    }
-    .brand p{
-      margin:0;
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.1;
-    }
-
-    .nav-links{
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      padding: 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.04);
-    }
-    .nav-links a{
-      padding: 10px 12px;
-      border-radius: 999px;
-      color: rgba(255,255,255,.78);
-      font-weight: 600;
-      font-size: 13px;
-      letter-spacing: .01em;
-      transition: background .25s var(--ease), transform .25s var(--ease), color .25s var(--ease);
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      white-space: nowrap;
-    }
-    .nav-links a:hover{
-      background: rgba(255,255,255,.07);
-      color: rgba(255,255,255,.95);
-      transform: translateY(-1px);
-    }
-
-    .nav-cta{
-      display:flex;
-      align-items:center;
-      justify-content:flex-end;
-      gap: 10px;
-      min-width: 240px;
-    }
-
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      color: rgba(255,255,255,.8);
-      font-weight: 700;
-      font-size: 13px;
-      white-space: nowrap;
-    }
-    .dot{
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,.25)), linear-gradient(135deg, var(--brand2), var(--brand1));
-      box-shadow: 0 0 0 3px rgba(34,211,238,.18);
-    }
-
-    .btn{
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.9);
-      padding: 12px 14px;
-      border-radius: 14px;
-      font-weight: 800;
-      font-size: 13px;
-      letter-spacing: .02em;
-      cursor:pointer;
-      transition: transform .22s var(--ease), box-shadow .22s var(--ease), background .22s var(--ease);
-      display:inline-flex;
-      align-items:center;
-      gap: 10px;
-      white-space: nowrap;
-    }
-    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.085); box-shadow: 0 14px 40px rgba(0,0,0,.35); }
-    .btn:focus{ outline:none; box-shadow: var(--focus); }
-
-    .btn-primary{
-      border: 1px solid rgba(255,255,255,.22);
-      background: linear-gradient(135deg, rgba(124,58,237,1), rgba(34,211,238,1));
-      box-shadow: 0 16px 50px rgba(34,211,238,.16);
-      position: relative;
-      overflow:hidden;
-    }
-    .btn-primary:before{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      background: radial-gradient(400px 120px at 20% 0%, rgba(255,255,255,.40), transparent 55%);
-      opacity:.75;
-      pointer-events:none;
-    }
-    .btn-primary span{ position: relative; z-index: 1; }
-
-    .icon{
-      width: 18px;
-      height: 18px;
-      display:inline-block;
-      opacity:.95;
-    }
-
-    /* Mobile nav */
-    .hamburger{
-      display:none;
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.05);
-      cursor:pointer;
-      align-items:center;
-      justify-content:center;
-      transition: transform .2s var(--ease), background .2s var(--ease);
-    }
-    .hamburger:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); }
-    .hamburger:focus{ outline:none; box-shadow: var(--focus); }
-    .hamburger .lines{
-      width: 18px;
-      height: 12px;
-      position: relative;
-    }
-    .hamburger .lines span{
-      position:absolute;
-      left:0; right:0;
-      height:2px;
-      background: rgba(255,255,255,.92);
-      border-radius: 2px;
-      transition: transform .25s var(--ease), top .25s var(--ease), opacity .2s var(--ease);
-    }
-    .hamburger .lines span:nth-child(1){ top:0; }
-    .hamburger .lines span:nth-child(2){ top:5px; }
-    .hamburger .lines span:nth-child(3){ top:10px; }
-
-    .mobile-drawer{
-      display:none;
-      padding: 0 0 14px;
-    }
-    .mobile-drawer .panel{
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      border-radius: var(--radius-lg);
-      padding: 12px;
-      box-shadow: var(--shadow2);
-    }
-    .mobile-drawer a{
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      padding: 12px 12px;
-      border-radius: 14px;
-      color: rgba(255,255,255,.85);
-      font-weight: 800;
-      border: 1px solid transparent;
-      transition: background .2s var(--ease), transform .2s var(--ease);
-    }
-    .mobile-drawer a:hover{
-      background: rgba(255,255,255,.07);
-      transform: translateY(-1px);
-    }
-
-    /* Hero */
-    .hero{
-      padding: 34px 0 26px;
-      position: relative;
-    }
-    .hero-grid{
-      display:grid;
-      grid-template-columns: 1.06fr .94fr;
-      gap: 22px;
-      align-items: stretch;
-    }
-
-    .hero-left{
-      padding: 22px 0;
-      display:flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 16px;
-    }
-
-    .badge{
-      display:inline-flex;
-      gap: 10px;
-      align-items:center;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      width: fit-content;
-    }
-    .spark{
-      width: 20px;
-      height: 20px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, rgba(249,115,22,.95), rgba(124,58,237,.95));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border: 1px solid rgba(255,255,255,.18);
-      box-shadow: 0 12px 40px rgba(249,115,22,.18);
-    }
-    .badge span{
-      font-weight: 900;
-      letter-spacing: .02em;
-      color: rgba(255,255,255,.88);
-      font-size: 13px;
-    }
-    .badge em{
-      font-style: normal;
-      color: rgba(255,255,255,.65);
-      font-weight: 800;
-      font-size: 13px;
-    }
-
-    .hero h2{
-      margin: 0;
-      font-size: clamp(32px, 4.2vw, 54px);
-      line-height: 1.02;
-      letter-spacing: -0.03em;
-    }
-    .gradient-text{
-      background: linear-gradient(135deg, #FFFFFF 0%, rgba(255,255,255,.86) 20%, rgba(34,211,238,1) 45%, rgba(124,58,237,1) 70%, rgba(249,115,22,1) 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .hero p{
-      margin:0;
-      color: var(--muted);
-      font-size: 15.5px;
-      line-height: 1.55;
-      max-width: 52ch;
-    }
-
-    .hero-actions{
-      display:flex;
-      align-items:center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 6px;
-    }
-
-    .hero-meta{
-      display:flex;
-      gap: 14px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-
-    .stat{
-      flex: 1;
-      min-width: 180px;
-      border-radius: var(--radius-lg);
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      padding: 14px 14px;
-      display:flex;
-      gap: 12px;
-      align-items:flex-start;
-      box-shadow: 0 14px 30px rgba(0,0,0,.16);
-    }
-    .stat .num{
-      font-family: var(--mono);
-      font-weight: 900;
-      letter-spacing: .02em;
-      font-size: 18px;
-      color: rgba(255,255,255,.92);
-    }
-    .stat .label{
-      font-weight: 800;
-      color: rgba(255,255,255,.85);
-      font-size: 13px;
-      margin-top: 2px;
-      line-height: 1.25;
-    }
-    .stat .sub{
-      color: var(--muted2);
-      font-size: 12.5px;
-      font-weight: 700;
-      margin-top: 4px;
-      line-height: 1.25;
-    }
-    .stat .badge2{
-      width: 40px;
-      height: 40px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, rgba(34,211,238,.95), rgba(124,58,237,.95));
-      border: 1px solid rgba(255,255,255,.18);
-      box-shadow: 0 14px 40px rgba(124,58,237,.18);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex: 0 0 auto;
-    }
-
-    .hero-right{
-      position: relative;
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(255,255,255,.10);
-      background:
-        radial-gradient(600px 420px at 20% 0%, rgba(124,58,237,.20), transparent 60%),
-        radial-gradient(500px 400px at 100% 20%, rgba(34,211,238,.18), transparent 55%),
-        rgba(255,255,255,.04);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      min-height: 420px;
-    }
-
-    /* Image grid inside hero card */
-    .image-grid{
-      position:absolute;
-      inset: 0;
-      padding: 16px;
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 14px;
-    }
-    .img-card{
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
-      overflow:hidden;
-      position: relative;
-      box-shadow: 0 18px 40px rgba(0,0,0,.25);
-    }
-    .img-card img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: saturate(1.05) contrast(1.02);
-      transform: scale(1.01);
-    }
-    .img-card:after{
-      content:"";
-      position:absolute;
-      inset:0;
-      background: linear-gradient(180deg, rgba(7,10,18,.0) 0%, rgba(7,10,18,.62) 100%);
-      opacity: .85;
-      pointer-events:none;
-    }
-
-    .img-card.small:after{
-      opacity: .75;
-    }
-
-    .img1{ grid-column: 1 / 2; grid-row: 1 / 3; }
-    .img2{ grid-column: 2 / 3; grid-row: 1 / 2; }
-    .img3{ grid-column: 2 / 3; grid-row: 2 / 3; }
-
-    .tag{
-      position:absolute;
-      left: 12px;
-      bottom: 12px;
-      z-index: 2;
-      display:flex;
-      align-items:center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(7,10,18,.35);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 14px 40px rgba(0,0,0,.3);
-    }
-    .tag b{ font-size: 13px; letter-spacing: .02em; }
-    .tag span{
-      color: rgba(255,255,255,.68);
-      font-weight: 800;
-      font-size: 12.5px;
-    }
-    .tag .chip{
-      width: 26px;
-      height: 26px;
-      border-radius: 11px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: linear-gradient(135deg, rgba(249,115,22,.95), rgba(124,58,237,.95));
-      display:flex; align-items:center; justify-content:center;
-    }
-
-    /* Section headings */
-    .section{
-      padding: 26px 0;
-    }
-    .section-head{
-      display:flex;
-      align-items:flex-end;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-    .section-head h3{
-      margin: 0;
-      font-size: 22px;
-      letter-spacing: -.02em;
-    }
-    .section-head p{
-      margin: 0;
-      color: var(--muted);
-      max-width: 66ch;
-      line-height: 1.55;
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    /* Cards */
-    .cards{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-    .card{
-      border-radius: var(--radius-lg);
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      padding: 16px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.18);
-      transition: transform .25s var(--ease), border-color .25s var(--ease), background .25s var(--ease);
-      position: relative;
-      overflow:hidden;
-      min-height: 160px;
-    }
-    .card:hover{
-      transform: translateY(-3px);
-      border-color: rgba(255,255,255,.18);
-      background: rgba(255,255,255,.06);
-    }
-    .card:before{
-      content:"";
-      position:absolute;
-      inset:-1px;
-      background: radial-gradient(600px 180px at 10% 0%, rgba(34,211,238,.18), transparent 45%);
-      opacity: 0;
-      transition: opacity .25s var(--ease);
-      pointer-events:none;
-    }
-    .card:hover:before{ opacity: 1; }
-    .card .top{
-      display:flex;
-      align-items:flex-start;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .card h4{
-      margin:0;
-      font-size: 16px;
-      letter-spacing: -.01em;
-    }
-    .card p{
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.55;
-      font-weight: 700;
-      font-size: 13.5px;
-    }
-    .card .price{
-      font-family: var(--mono);
-      font-weight: 900;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      color: rgba(255,255,255,.88);
-      font-size: 12.5px;
-      white-space: nowrap;
-    }
-
-    .card .bullets{
-      margin-top: 12px;
-      display:flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .chip2{
-      font-size: 12px;
-      color: rgba(255,255,255,.78);
-      font-weight: 800;
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-    }
-
-    /* Gallery */
-    .gallery{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 14px;
-    }
-    .gallery-main{
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      overflow:hidden;
-      position:relative;
-      min-height: 360px;
-      box-shadow: var(--shadow2);
-    }
-    .gallery-main img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transform: scale(1.02);
-      filter: saturate(1.05);
-    }
-    .gallery-main:after{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        radial-gradient(500px 240px at 10% 0%, rgba(124,58,237,.35), transparent 55%),
-        linear-gradient(180deg, rgba(7,10,18,.05) 0%, rgba(7,10,18,.78) 100%);
-      pointer-events:none;
-    }
-    .gallery-main .overlay{
-      position:absolute;
-      left: 16px;
-      bottom: 16px;
-      right: 16px;
-      display:flex;
-      align-items:flex-end;
-      justify-content: space-between;
-      gap: 14px;
-      z-index: 2;
-      flex-wrap: wrap;
-    }
-    .overlay .text{
-      max-width: 60ch;
-    }
-    .overlay h4{
-      margin:0;
-      font-size: 18px;
-      letter-spacing:-.02em;
-    }
-    .overlay p{
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-weight: 750;
-      line-height: 1.5;
-      font-size: 13.5px;
-    }
-    .overlay .stamp{
-      flex: 0 0 auto;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(7,10,18,.32);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 12px 12px;
-      min-width: 240px;
-    }
-    .stamp .row{
-      display:flex; justify-content: space-between; gap: 12px;
-      color: rgba(255,255,255,.82);
-      font-weight: 850;
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
-    .meter{
-      height: 10px;
-      background: rgba(255,255,255,.08);
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      overflow:hidden;
-    }
-    .meter > div{
-      height:100%;
-      width: 86%;
-      background: linear-gradient(90deg, rgba(34,211,238,1), rgba(124,58,237,1), rgba(249,115,22,1));
-      border-radius: 999px;
-    }
-
-    .gallery-side{
-      display:grid;
-      grid-template-rows: 1fr 1fr;
-      gap: 14px;
-    }
-    .gallery-mini{
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      overflow:hidden;
-      position:relative;
-      min-height: 170px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.16);
-    }
-    .gallery-mini img{
-      width:100%; height:100%;
-      object-fit: cover;
-      transform: scale(1.03);
-      filter: saturate(1.02);
-    }
-    .gallery-mini:after{
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(180deg, rgba(7,10,18,.02) 0%, rgba(7,10,18,.75) 100%);
-      pointer-events:none;
-    }
-    .gallery-mini .label{
-      position:absolute;
-      left: 14px;
-      bottom: 14px;
-      z-index: 2;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(7,10,18,.35);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      font-weight: 900;
-      letter-spacing: .01em;
-      color: rgba(255,255,255,.88);
-      font-size: 13px;
-    }
-
-    /* Booking section */
-    .booking{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      align-items: stretch;
-    }
-
-    .form-card{
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      padding: 16px;
-      box-shadow: var(--shadow2);
-      overflow:hidden;
-      position:relative;
-    }
-    .form-card:before{
-      content:"";
-      position:absolute;
-      inset:-1px;
-      background:
-        radial-gradient(600px 200px at 20% 0%, rgba(34,211,238,.18), transparent 55%),
-        radial-gradient(500px 180px at 90% 10%, rgba(124,58,237,.16), transparent 55%);
-      pointer-events:none;
-      opacity:.85;
-    }
-    .form-card > *{ position:relative; z-index:1; }
-
-    .form-card h4{
-      margin: 2px 0 10px;
-      font-size: 18px;
-      letter-spacing: -.02em;
-    }
-    .form-card p{
-      margin: 0 0 14px;
-      color: var(--muted);
-      font-weight: 750;
-      line-height:1.55;
-      font-size: 13.5px;
-    }
-
-    form{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-    .field{
-      display:flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    label{
-      font-size: 12.5px;
-      font-weight: 900;
-      color: rgba(255,255,255,.85);
-      letter-spacing: .02em;
-    }
-    input, select{
-      width:100%;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      color: rgba(255,255,255,.92);
-      outline:none;
-      transition: box-shadow .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
-      font-weight: 750;
-    }
-    input::placeholder{ color: rgba(255,255,255,.45); font-weight: 750; }
-    input:focus, select:focus{
-      box-shadow: var(--focus);
-      border-color: rgba(34,211,238,.45);
-      background: rgba(255,255,255,.07);
-    }
-
-    .span2{ grid-column: 1 / -1; }
-    .form-actions{
-      display:flex;
-      gap: 12px;
-      align-items:center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      margin-top: 6px;
-    }
-    .note{
-      color: var(--muted2);
-      font-weight: 750;
-      font-size: 12.5px;
-      line-height:1.35;
-      max-width: 52ch;
-    }
-
-    .info-card{
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      padding: 16px;
-      box-shadow: var(--shadow2);
-      position:relative;
-      overflow:hidden;
-      display:flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .info-card:after{
-      content:"";
-      position:absolute;
-      inset:-1px;
-      background:
-        radial-gradient(560px 220px at 10% 0%, rgba(249,115,22,.18), transparent 55%),
-        radial-gradient(620px 280px at 90% 10%, rgba(124,58,237,.18), transparent 55%);
-      pointer-events:none;
-      opacity:.9;
-    }
-    .info-card > *{ position:relative; z-index:1; }
-
-    .hours{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-    .hours .line{
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 12px 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-    }
-    .hours .line b{
-      font-size: 13.5px;
-      letter-spacing:.01em;
-    }
-    .hours .line span{
-      color: rgba(255,255,255,.72);
-      font-weight: 850;
-      font-size: 13px;
-    }
-
-    .map{
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(255,255,255,.10);
-      overflow:hidden;
-      position:relative;
-      min-height: 170px;
-      background:
-        radial-gradient(500px 260px at 30% 0%, rgba(34,211,238,.20), transparent 60%),
-        rgba(255,255,255,.04);
-    }
-    .map svg{
-      width:100%;
-      height:100%;
-      display:block;
-      opacity:.95;
-    }
-    .map .pin{
-      position:absolute;
-      left: 18px;
-      bottom: 18px;
-      padding: 10px 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(7,10,18,.35);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      z-index: 2;
-    }
-    .pin b{ display:block; font-size: 13.5px; }
-    .pin span{ color: var(--muted); font-weight: 800; font-size: 12.5px; line-height:1.35; display:block; margin-top: 4px; }
-
-    /* Testimonials */
-    .testimonials{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 14px;
-    }
-    .quote{
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      padding: 16px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.16);
-      overflow:hidden;
-      position:relative;
-      min-height: 190px;
-    }
-    .quote:before{
-      content:"";
-      position:absolute;
-      inset:-1px;
-      background: radial-gradient(520px 160px at 10% 0%, rgba(124,58,237,.18), transparent 55%);
-      opacity:.9;
-      pointer-events:none;
-    }
-    .quote > *{ position:relative; z-index:1; }
-
-    .quote .stars{
-      display:flex; gap: 6px; margin-bottom: 10px;
-      color: rgba(255,255,255,.92);
-      font-size: 14px;
-    }
-    .quote p{
-      margin: 0;
-      color: rgba(255,255,255,.82);
-      font-weight: 780;
-      line-height: 1.6;
-      font-size: 13.8px;
-    }
-    .quote .who{
-      display:flex; align-items:center; gap: 12px; margin-top: 14px;
-    }
-    .avatar{
-      width: 42px; height: 42px; border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.14);
-      background:
-        radial-gradient(14px 14px at 30% 30%, rgba(255,255,255,.9), rgba(255,255,255,0) 60%),
-        linear-gradient(135deg, rgba(34,211,238,.95), rgba(124,58,237,.95));
-      box-shadow: 0 16px 40px rgba(34,211,238,.12);
-    }
-    .who b{ display:block; font-size: 13.5px; }
-    .who span{ color: var(--muted); font-weight: 850; font-size: 12.5px; margin-top: 2px; display:block; }
-
-    /* Footer */
-    .footer{
-      padding: 28px 0 46px;
-      border-top: 1px solid rgba(255,255,255,.08);
-      margin-top: 20px;
-    }
-    .footer-inner{
-      display:flex;
-      align-items:flex-start;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    .foot-left{
-      max-width: 60ch;
-    }
-    .foot-left p{
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-weight: 760;
-      line-height: 1.6;
-      font-size: 13.5px;
-    }
-    .foot-right{
-      display:flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items:center;
-      justify-content:flex-end;
-    }
-    .link-pill{
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      color: rgba(255,255,255,.86);
-      font-weight: 850;
-      font-size: 13px;
-      transition: transform .2s var(--ease), background .2s var(--ease);
-    }
-    .link-pill:hover{ transform: translateY(-2px); background: rgba(255,255,255,.07); }
-
-    /* Responsive */
-    @media (max-width: 980px){
-      .hero-grid{ grid-template-columns: 1fr; }
-      .hero-right{ min-height: 380px; }
-      .cards{ grid-template-columns: repeat(2, 1fr); }
-      .gallery{ grid-template-columns: 1fr; }
-      .gallery-side{ grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
-      .booking{ grid-template-columns: 1fr; }
-      .testimonials{ grid-template-columns: 1fr; }
-      .nav-links{ display:none; }
-      .nav-cta .pill{ display:none; }
-      .nav-cta{ min-width: auto; }
-      .hamburger{ display:flex; }
-      .mobile-drawer{ display:block; }
-    }
-
-    @media (max-width: 560px){
-      .container{ width: min(var(--max), calc(100% - 28px)); }
-      .cards{ grid-template-columns: 1fr; }
-      form{ grid-template-columns: 1fr; }
-      .hero-meta .stat{ min-width: 100%; }
-      .gallery-side{ grid-template-columns: 1fr; }
-      .stamp{ min-width: 100% !important; }
-    }
-
-    /* Reduced motion */
-    @media (prefers-reduced-motion: reduce){
-      *{ animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lumière — Hair &amp; Beauty Salon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="salon-style.css">
 </head>
-
 <body>
-  <!-- NAV -->
-  <header class="nav">
-    <div class="container">
-      <div class="nav-inner">
-        <a class="brand" href="#top" aria-label="Lumina Salon home">
-          <div class="logo" aria-hidden="true"></div>
-          <div>
-            <h1>Lumina Salon</h1>
-            <p>Hair • Beauty • Glow</p>
-          </div>
-        </a>
 
-        <nav class="nav-links" aria-label="Primary navigation">
-          <a href="#services">
-            <span class="icon" aria-hidden="true">✨</span> Services
-          </a>
-          <a href="#gallery">
-            <span class="icon" aria-hidden="true">📸</span> Gallery
-          </a>
-          <a href="#testimonials">
-            <span class="icon" aria-hidden="true">💬</span> Reviews
-          </a>
-          <a href="#book">
-            <span class="icon" aria-hidden="true">📅</span> Book
-          </a>
-        </nav>
+<header id="site-header" class="on-hero">
+  <nav>
+    <div class="logo">Lumière</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#stylists">Stylists</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#booking">Book Now</a></li>
+    </ul>
+    <button class="menu-toggle" aria-label="Toggle menu">☰</button>
+  </nav>
+</header>
 
-        <div class="nav-cta">
-          <div class="pill" title="Currently accepting bookings">
-            <span class="dot" aria-hidden="true"></span>
-            <span>Open for bookings</span>
-          </div>
-          <button class="btn btn-primary" id="openBookingBtn" type="button">
-            <span>Book an appointment</span>
-            <span class="icon" aria-hidden="true">→</span>
-          </button>
+<section class="hero">
+  <div class="hero-bg">
+    <img src="https://images.unsplash.com/photo-1781450090585-1a511b7066d9?auto=format&fit=crop&w=1920&q=80" alt="Bright, modern salon interior with arched alcoves and styling chairs">
+  </div>
+  <div class="wrap hero-inner">
+    <span class="eyebrow">Hair · Color · Nails · Spa</span>
+    <h1>Where beauty<br>meets <em>calm</em>.</h1>
+    <p class="lede">Lumière is a boutique salon built around unhurried care — expert stylists, quiet rooms, and results you'll want to show off.</p>
+    <div class="hero-cta">
+      <a href="#booking" class="btn btn-primary">Book an Appointment</a>
+      <a href="#services" class="btn btn-light">Explore Services</a>
+    </div>
+  </div>
+  <div class="scroll-cue">Scroll</div>
+</section>
 
-          <button class="hamburger" id="hamburgerBtn" type="button" aria-label="Open menu" aria-expanded="false">
-            <span class="lines" aria-hidden="true">
-              <span></span><span></span><span></span>
-            </span>
-          </button>
-        </div>
-      </div>
-
-      <div class="mobile-drawer" id="mobileDrawer" hidden>
-        <div class="panel" role="navigation" aria-label="Mobile navigation">
-          <a href="#services">
-            <span>✨ Services</span><span aria-hidden="true">→</span>
-          </a>
-          <a href="#gallery">
-            <span>📸 Gallery</span><span aria-hidden="true">→</span>
-          </a>
-          <a href="#testimonials">
-            <span>💬 Reviews</span><span aria-hidden="true">→</span>
-          </a>
-          <a href="#book">
-            <span>📅 Book</span><span aria-hidden="true">→</span>
-          </a>
-        </div>
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="about-photo reveal">
+      <div class="frame"></div>
+      <img src="https://images.unsplash.com/photo-1746723375184-5f537d2e6f31?auto=format&fit=crop&w=900&q=80" alt="Stylist working with a client in a bright salon">
+    </div>
+    <div class="about-text reveal">
+      <span class="eyebrow">Our Story</span>
+      <h2 style="font-size:clamp(30px,4vw,44px);margin-bottom:22px;">A salon built on unhurried craft</h2>
+      <p>Lumière opened with one idea: great beauty work takes time, attention, and a room that doesn't rush you. Every appointment is scheduled with space to breathe — no double-booked chairs, no clock-watching.</p>
+      <p>Our team trains continuously in colour theory, cutting technique, and nail artistry, so whether you're in for a trim or a full transformation, you're in careful hands.</p>
+      <div class="about-stats">
+        <div><div class="num">12+</div><div class="label">Years Open</div></div>
+        <div><div class="num">9</div><div class="label">Master Stylists</div></div>
+        <div><div class="num">4.9</div><div class="label">Average Rating</div></div>
       </div>
     </div>
-  </header>
+  </div>
+</section>
 
-  <!-- HERO -->
-  <main id="top" class="hero">
-    <div class="container">
-      <div class="hero-grid">
-        <section class="hero-left" aria-label="Hero">
-          <div class="badge">
-            <div class="spark" aria-hidden="true">✦</div>
-            <span>Modern glam. <em>Effortless results.</em></span>
-          </div>
+<section id="services" class="bg-alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Services</span>
+      <h2>Crafted for you</h2>
+      <p>From a precision cut to a full colour correction, every service starts with a consultation — so you always know what to expect.</p>
+    </div>
+    <div class="service-grid reveal">
+      <a href="#booking" class="service-card">
+        <img src="https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?auto=format&fit=crop&w=800&q=80" alt="Stylist cutting a client's hair">
+        <div class="service-content">
+          <span class="price">From $65</span>
+          <h3>Cut &amp; Style</h3>
+          <p>Precision cutting tailored to your face shape and texture.</p>
+        </div>
+      </a>
+      <a href="#booking" class="service-card">
+        <img src="https://images.unsplash.com/photo-1707979577466-2d6109c68a45?auto=format&fit=crop&w=800&q=80" alt="Hair colour application in progress">
+        <div class="service-content">
+          <span class="price">From $110</span>
+          <h3>Colour &amp; Balayage</h3>
+          <p>Dimensional colour work using low-ammonia formulas.</p>
+        </div>
+      </a>
+      <a href="#booking" class="service-card">
+        <img src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80" alt="Manicure treatment at the nail bar">
+        <div class="service-content">
+          <span class="price">From $45</span>
+          <h3>Manicure &amp; Nail Art</h3>
+          <p>Gel, dip, and hand-painted detail — done at an unrushed pace.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
 
-          <h2>
-            Your new look starts at <span class="gradient-text">Lumina Salon</span>
-          </h2>
+<section id="gallery">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Gallery</span>
+      <h2>Recent work</h2>
+      <p>A look inside the studio and a few of our favourite finished looks.</p>
+    </div>
+    <div class="gallery-grid reveal">
+      <a href="#" class="tall"><img src="https://images.unsplash.com/photo-1712213396688-c6f2d536671f?auto=format&fit=crop&w=700&q=80" alt="Stylist cutting hair with scissors"></a>
+      <a href="#"><img src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=700&q=80" alt="Fresh pink manicure close-up"></a>
+      <a href="#" class="wide"><img src="https://images.unsplash.com/photo-1602549179763-ce6c9df961b7?auto=format&fit=crop&w=1000&q=80" alt="Rich brown hair colour close-up"></a>
+      <a href="#"><img src="https://images.unsplash.com/photo-1610992015762-45dca7fa3a85?auto=format&fit=crop&w=700&q=80" alt="Pedicure treatment"></a>
+      <a href="#" class="wide"><img src="https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?auto=format&fit=crop&w=1000&q=80" alt="Client getting a haircut"></a>
+      <a href="#"><img src="https://images.unsplash.com/photo-1746723375184-5f537d2e6f31?auto=format&fit=crop&w=700&q=80" alt="Salon interior with client at counter"></a>
+    </div>
+  </div>
+</section>
 
-          <p>
-            A boutique salon experience with premium styling, personalized consultations, and a calm vibe.
-            Whether you want a fresh cut, sleek color, or a full transformation—our team is ready.
-          </p>
-
-          <div class="hero-actions">
-            <button class="btn btn-primary" type="button" id="heroBookBtn">
-              <span>Get a free style consult</span>
-              <span class="icon" aria-hidden="true">✦</span>
-            </button>
-            <a class="btn" href="#services">
-              <span>Explore services</span>
-              <span class="icon" aria-hidden="true">↘</span>
-            </a>
-          </div>
-
-          <div class="hero-meta" aria-label="Highlights">
-            <div class="stat">
-              <div class="badge2" aria-hidden="true">💎</div>
-              <div>
-                <div class="num">Premium care</div>
-                <div class="label">High-quality products</div>
-                <div class="sub">Color-safe • heat-protect options</div>
-              </div>
-            </div>
-            <div class="stat">
-              <div class="badge2" aria-hidden="true">⏱️</div>
-              <div>
-                <div class="num">On-time</div>
-                <div class="label">Efficient & relaxing</div>
-                <div class="sub">Clear scheduling • thoughtful pacing</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <aside class="hero-right" aria-label="Salon photography collage">
-          <div class="image-grid">
-            <div class="img-card img1">
-              <img alt="Client getting a hair treatment in a modern salon"
-                src="https://images.unsplash.com/photo-1520975958221-6b3f7a4b7a5d?auto=format&fit=crop&w=1200&q=70" />
-              <div class="tag">
-                <div class="chip" aria-hidden="true">✶</div>
-                <div>
-                  <b>Signature Treatments</b>
-                  <span>Hydrate • Repair • Shine</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="img-card small img2">
-              <img alt="Stylish hairstyle with soft natural light"
-                src="https://images.unsplash.com/photo-1520975869010-2f8d5f1b2a2e?auto=format&fit=crop&w=900&q=70" />
-              <div class="tag">
-                <div class="chip" aria-hidden="true">⚡</div>
-                <div>
-                  <b>Color & Gloss</b>
-                  <span>Vibrant finish</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="img-card small img3">
-              <img alt="Makeup and beauty consultation scene"
-                src="https://images.unsplash.com/photo-1556228724-4b4b2b7b6b0a?auto=format&fit=crop&w=900&q=70" />
-              <div class="tag">
-                <div class="chip" aria-hidden="true">✧</div>
-                <div>
-                  <b>Event Glam</b>
-                  <span>Weddings • Photos</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </aside>
+<section id="stylists" class="bg-alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Our Team</span>
+      <h2>Meet the stylists</h2>
+      <p>Book with anyone on our team — every stylist trains to the same standard.</p>
+    </div>
+    <div class="stylist-grid reveal">
+      <div class="stylist-card">
+        <div class="stylist-photo"><img src="https://images.unsplash.com/photo-1499557354967-2b2d8910bcca?auto=format&fit=crop&w=500&q=80" alt="Stylist portrait"></div>
+        <h3>Noelle Fischer</h3>
+        <div class="role">Colour Director</div>
+      </div>
+      <div class="stylist-card">
+        <div class="stylist-photo"><img src="https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?auto=format&fit=crop&w=500&q=80" alt="Stylist portrait"></div>
+        <h3>Rae Whitfield</h3>
+        <div class="role">Cutting Specialist</div>
+      </div>
+      <div class="stylist-card">
+        <div class="stylist-photo"><img src="https://images.unsplash.com/photo-1605980766335-d3a41c7332a1?auto=format&fit=crop&w=500&q=80" alt="Stylist portrait"></div>
+        <h3>Josie Marlowe</h3>
+        <div class="role">Balayage Artist</div>
+      </div>
+      <div class="stylist-card">
+        <div class="stylist-photo"><img src="https://images.unsplash.com/photo-1574773004910-1eeaabb62b55?auto=format&fit=crop&w=500&q=80" alt="Stylist portrait"></div>
+        <h3>Priya Anand</h3>
+        <div class="role">Nail Artist</div>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- SERVICES -->
-    <section id="services" class="section" aria-label="Services">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h3>Popular services</h3>
-            <p>
-              Choose a look—or tell us the vibe you want. We’ll tailor the details during your consultation.
-            </p>
-          </div>
-          <a class="btn" href="#book" style="align-self:flex-start">
-            <span>Check availability</span>
-            <span class="icon" aria-hidden="true">📅</span>
-          </a>
+<section id="pricing">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow" style="justify-content:center;">Pricing</span>
+      <h2>Simple, honest rates</h2>
+      <p style="margin-left:auto;margin-right:auto;">Final pricing depends on hair length and density — your stylist will confirm at consultation.</p>
+    </div>
+    <div class="price-grid reveal">
+      <div class="price-list">
+        <h3>Hair</h3>
+        <div class="price-row"><div><div class="name">Women's Cut &amp; Blowdry</div><div class="desc">Consultation, wash, cut, style</div></div><div class="amt">$85</div></div>
+        <div class="price-row"><div><div class="name">Men's Cut</div><div class="desc">Precision cut &amp; finish</div></div><div class="amt">$50</div></div>
+        <div class="price-row"><div><div class="name">Full Balayage</div><div class="desc">Hand-painted, toned, styled</div></div><div class="amt">$210</div></div>
+        <div class="price-row"><div><div class="name">Root Touch-Up</div><div class="desc">Single-process colour</div></div><div class="amt">$95</div></div>
+        <div class="price-row"><div><div class="name">Keratin Smoothing</div><div class="desc">Frizz-taming treatment</div></div><div class="amt">$180</div></div>
+      </div>
+      <div class="price-list">
+        <h3>Nails &amp; Spa</h3>
+        <div class="price-row"><div><div class="name">Classic Manicure</div><div class="desc">Shape, cuticle care, polish</div></div><div class="amt">$45</div></div>
+        <div class="price-row"><div><div class="name">Gel Manicure</div><div class="desc">Long-wear gel finish</div></div><div class="amt">$60</div></div>
+        <div class="price-row"><div><div class="name">Spa Pedicure</div><div class="desc">Soak, scrub, massage, polish</div></div><div class="amt">$70</div></div>
+        <div class="price-row"><div><div class="name">Express Facial</div><div class="desc">30-minute refresh</div></div><div class="amt">$65</div></div>
+        <div class="price-row"><div><div class="name">Signature Facial</div><div class="desc">60-minute deep treatment</div></div><div class="amt">$120</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-dark">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <span class="eyebrow" style="justify-content:center;color:var(--blush);">Reviews</span>
+      <h2>What clients say</h2>
+    </div>
+    <div class="testi-grid reveal">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"Best balayage I've had in years — Josie actually listened to what I wanted instead of pushing her own idea."</p>
+        <div class="who">Renee M.</div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"The salon feels calm the moment you walk in. No rushing, no overbooking. My cut has never held up this well."</p>
+        <div class="who">Diego T.</div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"My gel manicure lasted three full weeks without a single chip. Booking again for my sister's wedding."</p>
+        <div class="who">Aaliyah S.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="booking" class="bg-alt">
+  <div class="wrap booking-grid">
+    <div class="reveal">
+      <span class="eyebrow">Visit Us</span>
+      <h2 style="font-size:clamp(30px,4vw,44px);margin-bottom:26px;">Book your appointment</h2>
+      <div class="info-block">
+        <span class="label">Address</span>
+        <p>228 Magnolia Avenue, Riverside District</p>
+      </div>
+      <div class="info-block">
+        <span class="label">Contact</span>
+        <p>hello@lumiersalon.com · (555) 402-7719</p>
+      </div>
+      <div class="info-block">
+        <span class="label">Hours</span>
+        <div class="hours-row"><span>Tue – Fri</span><span>9:00 – 19:00</span></div>
+        <div class="hours-row"><span>Saturday</span><span>9:00 – 17:00</span></div>
+        <div class="hours-row"><span>Sun – Mon</span><span>Closed</span></div>
+      </div>
+    </div>
+    <form class="reveal" onsubmit="event.preventDefault(); this.querySelector('.form-status').textContent='Thank you — we\'ll confirm your appointment by email shortly.';">
+      <div class="form-row">
+        <div>
+          <label for="name">Name</label>
+          <input id="name" type="text" placeholder="Your name" required>
         </div>
-
-        <div class="cards">
-          <article class="card">
-            <div class="top">
-              <div>
-                <h4>Cut & Style</h4>
-                <p>Precision shaping + finish styling for your hair type.</p>
-              </div>
-              <div class="price">From $55</div>
-            </div>
-            <div class="bullets">
-              <span class="chip2">Consultation</span>
-              <span class="chip2">Wash + style</span>
-              <span class="chip2">Blowout option</span>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="top">
-              <div>
-                <h4>Color Refresh</h4>
-                <p>Gloss, toner, and dimension to brighten without heavy lift.</p>
-              </div>
-              <div class="price">From $95</div>
-            </div>
-            <div class="bullets">
-              <span class="chip2">Color-safe</span>
-              <span class="chip2">Shine treatment</span>
-              <span class="chip2">Toner included</span>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="top">
-              <div>
-                <h4>Signature Treatment</h4>
-                <p>Deep conditioning + repair for smoother, healthier-looking hair.</p>
-              </div>
-              <div class="price">From $65</div>
-            </div>
-            <div class="bullets">
-              <span class="chip2">Hydration</span>
-              <span class="chip2">Heat protect</span>
-              <span class="chip2">Scalp focus</span>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="top">
-              <div>
-                <h4>Bridal & Event Glam</h4>
-                <p>Full look design—hair, polish, and photo-ready finishing touches.</p>
-              </div>
-              <div class="price">From $220</div>
-            </div>
-            <div class="bullets">
-              <span class="chip2">Trial option</span>
-              <span class="chip2">Timeless updos</span>
-              <span class="chip2">Makeup add-on</span>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="top">
-              <div>
-                <h4>Extensions Consultation</h4>
-                <p>We match length, texture, and blend for seamless results.</p>
-              </div>
-              <div class="price">Free</div>
-            </div>
-            <div class="bullets">
-              <span class="chip2">Matching</span>
-              <span class="chip2">Placement</span>
-              <span class="chip2">Aftercare</span>
-            </div>
-          </article>
-
-          <article class="card">
-            <div class="top">
-              <div>
-                <h4>Glow-Up Add-ons</h4>
-                <p>Small upgrades that make a big difference—perfect before events.</p>
-              </div>
-              <div class="price">From $25</div>
-            </div>
-            <div class="bullets">
-              <span class="chip2">Extra gloss</span>
-              <span class="chip2">Conditioning boost</span>
-              <span class="chip2">Style upgrade</span>
-            </div>
-          </article>
+        <div>
+          <label for="phone">Phone</label>
+          <input id="phone" type="tel" placeholder="(555) 000-0000" required>
         </div>
       </div>
-    </section>
-
-    <!-- GALLERY -->
-    <section id="gallery" class="section" aria-label="Gallery">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h3>Fresh inspiration</h3>
-            <p>Swipe-worthy styles, soft finishes, and the glow you’ll feel walking out.</p>
-          </div>
-          <div class="pill" style="border-color: rgba(255,255,255,.12);">
-            <span class="dot" aria-hidden="true"></span>
-            <span>New looks weekly</span>
-          </div>
-        </div>
-
-        <div class="gallery">
-          <div class="gallery-main">
-            <img alt="Salon glam look with glossy highlights"
-              src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1400&q=70" />
-            <div class="overlay">
-              <div class="text">
-                <h4>Color dimension that moves with you</h4>
-                <p>
-                  From subtle balayage to vivid gloss—our colorists focus on blend, tone, and shine for a natural finish.
-                </p>
-              </div>
-              <div class="stamp" aria-label="Client satisfaction meter">
-                <div class="row">
-                  <span>Client glow score</span>
-                  <span>4.9/5</span>
-                </div>
-                <div class="meter" role="progressbar" aria-valuenow="86" aria-valuemin="0" aria-valuemax="100">
-                  <div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="gallery-side">
-            <div class="gallery-mini">
-              <img alt="Voluminous hairstyle styling in a salon"
-                src="https://images.unsplash.com/photo-1520975682031-a5f0c0f3c7f1?auto=format&fit=crop&w=1000&q=70" />
-              <div class="label">Soft volume • Sleek finish</div>
-            </div>
-            <div class="gallery-mini">
-              <img alt="Makeup artist applying finishing touches for an event"
-                src="https://images.unsplash.com/photo-1541698444083-023c3f2f5d5f?auto=format&fit=crop&w=1000&q=70" />
-              <div class="label">Event-ready • Photo polish</div>
-            </div>
-          </div>
-        </div>
+      <div>
+        <label for="service">Service</label>
+        <select id="service">
+          <option>Cut &amp; Style</option>
+          <option>Colour &amp; Balayage</option>
+          <option>Manicure &amp; Nail Art</option>
+          <option>Facial &amp; Spa</option>
+          <option>Not sure yet</option>
+        </select>
       </div>
-    </section>
-
-    <!-- TESTIMONIALS -->
-    <section id="testimonials" class="section" aria-label="Testimonials">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h3>What clients say</h3>
-            <p>
-              Real experiences from people who wanted a look that feels like *them*—only upgraded.
-            </p>
-          </div>
-          <a class="btn" href="#book">
-            <span>Join the glow</span>
-            <span class="icon" aria-hidden="true">💖</span>
-          </a>
-        </div>
-
-        <div class="testimonials">
-          <article class="quote">
-            <div class="stars" aria-hidden="true">★★★★★</div>
-            <p>
-              “They nailed my cut and the color blend looks so natural. I’ve never felt more confident leaving a salon.”
-            </p>
-            <div class="who">
-              <div class="avatar" aria-hidden="true"></div>
-              <div>
-                <b>Maria R.</b>
-                <span>Color Refresh</span>
-              </div>
-            </div>
-          </article>
-
-          <article class="quote">
-            <div class="stars" aria-hidden="true">★★★★★</div>
-            <p>
-              “Calm, professional, and super talented. My hair feels healthier and the style holds all day.”
-            </p>
-            <div class="who">
-              <div class="avatar" aria-hidden="true"></div>
-              <div>
-                <b>Jordan K.</b>
-                <span>Cut & Style</span>
-              </div>
-            </div>
-          </article>
-
-          <article class="quote">
-            <div class="stars" aria-hidden="true">★★★★★</div>
-            <p>
-              “My wedding glam was flawless. The details were perfect and the whole experience was relaxing.”
-            </p>
-            <div class="who">
-              <div class="avatar" aria-hidden="true"></div>
-              <div>
-                <b>Sophia L.</b>
-                <span>Bridal & Event Glam</span>
-              </div>
-            </div>
-          </article>
-        </div>
+      <div>
+        <label for="notes">Notes</label>
+        <textarea id="notes" placeholder="Preferred day, stylist, or anything we should know"></textarea>
       </div>
-    </section>
+      <button type="submit" class="btn btn-primary">Request Appointment</button>
+      <p class="form-status" style="font-size:13px;color:var(--rosewood);min-height:18px;"></p>
+    </form>
+  </div>
+</section>
 
-    <!-- BOOKING -->
-    <section id="book" class="section" aria-label="Booking">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <h3>Book your appointment</h3>
-            <p>
-              Tell us what you’re looking for. We’ll confirm your time and tailor your service on arrival.
-            </p>
-          </div>
-        </div>
+<footer>
+  <div class="wrap">
+    <div class="footer-row">
+      <div class="logo" style="color:var(--cream);">Lumière</div>
+      <ul class="footer-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#stylists">Stylists</a></li>
+        <li><a href="#booking">Book Now</a></li>
+      </ul>
+    </div>
+    <div class="copyright">© 2026 LUMIÈRE SALON &amp; SPA — 228 MAGNOLIA AVENUE, RIVERSIDE DISTRICT</div>
+  </div>
+</footer>
 
-        <div class="booking">
-          <div class="form-card">
-            <h4>Request a booking</h4>
-            <p>Fill out the form below—this demo won’t send data, but it shows the full UI flow.</p>
+<script src="salon-script.js"></script>
 
-            <form id="bookingForm">
-              <div class="field">
-                <label for="name">Full name</label>
-                <input id="name" name="name" placeholder="e.g., Taylor Johnson" required />
-              </div>
-
-              <div class="field">
-                <label for="phone">Phone</label>
-                <input id="phone" name="phone" placeholder="e.g., (555) 123-4567" required />
-              </div>
-
-              <div class="field">
-                <label for="service">Service</label>
-                <select id="service" name="service" required>
-                  <option value="cut">Cut & Style</option>
-                  <option value="color">Color Refresh</option>
-                  <option value="treatment">Signature Treatment</option>
-                  <option value="event">Bridal & Event Glam</option>
-                  <option value="extensions">Extensions Consultation</option>
-                </select>
-              </div>
-
-              <div class="field">
-                <label for="stylist">Preferred stylist</label>
-                <select id="stylist" name="stylist" required>
-                  <option value="any" selected>Any available</option>
-                  <option value="ava">Ava</option>
-                  <option value="miles">Miles</option>
-                  <option value="noor">Noor</option>
-                </select>
-              </div>
-
-              <div class="field span2">
-                <label for="date">Preferred date</label>
-                <input id="date" name="date" type="date" required />
-              </div>
-
-              <div class="field span2">
-                <label for="notes">Notes (optional)</label>
-                <input id="notes" name="notes" placeholder="Your goals, inspiration, or any concerns" />
-              </div>
-
-              <div class="span2 form-actions">
-                <div class="note" id="formNote">
-                  By booking, you agree to a quick confirmation call for scheduling.
-                </div>
-                <button class="btn btn-primary" type="submit">
-                  <span>Request booking</span>
-                  <span class="icon" aria-hidden="true">✓</span>
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <aside class="info-card" aria-label="Salon info">
-            <h4 style="margin:2px 0 0; position:relative; z-index:1;">Visit Lumina</h4>
-            <p style="margin:0; color: var(--muted); font-weight:760; line-height:1.55; font-size:13.5px; position:relative; z-index:1;">
-              Convenient hours, a soothing space, and a team that listens.
-            </p>
-
-            <div class="hours" aria-label="Hours">
-              <div class="line"><b>Mon - Thu</b><span>10:00 AM — 7:00 PM</span></div>
-              <div class="line"><b>Fri</b><span>10:00 AM — 8:00 PM</span></div>
-              <div class="line"><b>Sat</b><span>9:00 AM — 5:00 PM</span></div>
-              <div class="line"><b>Sun</b><span>Closed (appointments by request)</span></div>
-            </div>
-
-            <div class="map" aria-label="Location preview map">
-              <svg viewBox="0 0 800 420" role="img" aria-label="Stylized map">
-                <defs>
-                  <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stop-color="rgba(34,211,238,.9)"/>
-                    <stop offset="50%" stop-color="rgba(124,58,237,.9)"/>
-                    <stop offset="100%" stop-color="rgba(249,115,22,.85)"/>
-                  </linearGradient>
-                </defs>
-                <rect x="0" y="0" width="800" height="420" fill="rgba(255,255,255,0.03)" />
-                <g opacity=".65" stroke="rgba(255,255,255,.25)" stroke-width="2" fill="none">
-                  <path d="M70 320 C180 250, 270 360, 380 290 S 590 230, 720 300" />
-                  <path d="M110 130 C220 180, 320 80, 420 130 S 610 210, 700 160" />
-                  <path d="M160 250 C250 220, 310 250, 420 220 S 590 170, 680 210" />
-                </g>
-                <g opacity=".9">
-                  <circle cx="560" cy="220" r="9" fill="url(#g1)" />
-                  <circle cx="560" cy="220" r="22" fill="rgba(34,211,238,.12)" />
-                  <circle cx="280" cy="165" r="7" fill="rgba(124,58,237,.9)" />
-                  <circle cx="280" cy="165" r="18" fill="rgba(124,58,237,.12)" />
-                </g>
-                <g opacity=".45" stroke="rgba(255,255,255,.18)" stroke-width="10" stroke-linecap="round">
-                  <path d="M70 95 L190 95" />
-                  <path d="M620 330 L720 330" />
-                </g>
-              </svg>
-              <div class="pin">
-                <b>Downtown • City Center</b>
-                <span>123 Glow Avenue, Suite 5 • Parking available</span>
-              </div>
-            </div>
-
-          </aside>
-        </div>
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="footer" aria-label="Footer">
-      <div class="container">
-        <div class="footer-inner">
-          <div class="foot-left">
-            <div class="brand" style="gap:10px;">
-              <div class="logo" aria-hidden="true" style="width:38px;height:38px;border-radius:14px;"></div>
-              <div>
-                <h1 style="font-size:13px;">Lumina Salon</h1>
-                <p style="font-size:12px;">Hair • Beauty • Glow</p>
-              </div>
-            </div>
-            <p>
-              Designed for a premium salon feel: modern gradients, responsive layout, and attractive imagery.
-              Replace the placeholder address, contact info, and service names to match your business.
-            </p>
-          </div>
-
-          <div class="foot-right" aria-label="Footer links">
-            <a class="link-pill" href="#services">Services</a>
-            <a class="link-pill" href="#gallery">Gallery</a>
-            <a class="link-pill" href="#testimonials">Reviews</a>
-            <a class="link-pill" href="#book">Book</a>
-          </div>
-        </div>
-
-        <div style="margin-top:18px; color: rgba(255,255,255,.52); font-weight:800; font-size:12.5px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-          <span>© <span id="year"></span> Lumina Salon. All rights reserved.</span>
-          <span style="font-family: var(--mono);">Built with HTML + CSS</span>
-        </div>
-      </div>
-    </footer>
-  </main>
-
-  <script>
-    // Mobile drawer toggle
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const mobileDrawer = document.getElementById('mobileDrawer');
-
-    if (hamburgerBtn) {
-      hamburgerBtn.addEventListener('click', () => {
-        const isHidden = mobileDrawer.hasAttribute('hidden');
-        if (isHidden) {
-          mobileDrawer.removeAttribute('hidden');
-          hamburgerBtn.setAttribute('aria-expanded', 'true');
-        } else {
-          mobileDrawer.setAttribute('hidden', '');
-          hamburgerBtn.setAttribute('aria-expanded', 'false');
-        }
-      });
-    }
-
-    // Close drawer when clicking a link (mobile)
-    document.querySelectorAll('.mobile-drawer a').forEach(a => {
-      a.addEventListener('click', () => {
-        if (!mobileDrawer.hasAttribute('hidden')) {
-          mobileDrawer.setAttribute('hidden', '');
-          hamburgerBtn?.setAttribute('aria-expanded', 'false');
-        }
-      });
-    });
-
-    // Smooth scroll for internal anchors
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        const id = link.getAttribute('href');
-        if (!id || id === '#') return;
-        const el = document.querySelector(id);
-        if (!el) return;
-        e.preventDefault();
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
-
-    // Booking buttons scroll to booking section
-    function goToBooking(){
-      const book = document.getElementById('book');
-      if (book) book.scrollIntoView({ behavior:'smooth', block:'start' });
-      setTimeout(() => {
-        document.getElementById('name')?.focus();
-      }, 450);
-    }
-    document.getElementById('heroBookBtn')?.addEventListener('click', goToBooking);
-    document.getElementById('openBookingBtn')?.addEventListener('click', goToBooking);
-
-    // Date default to tomorrow (for better UX)
-    const dateInput = document.getElementById('date');
-    if (dateInput) {
-      const d = new Date();
-      d.setDate(d.getDate() + 1);
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth() + 1).padStart(2,'0');
-      const dd = String(d.getDate()).padStart(2,'0');
-      dateInput.value = `${yyyy}-${mm}-${dd}`;
-      dateInput.min = `${yyyy}-${mm}-${dd}`;
-    }
-
-    // Demo form handling (no backend)
-    const bookingForm = document.getElementById('bookingForm');
-    bookingForm?.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const name = document.getElementById('name')?.value?.trim() || 'there';
-      const service = document.getElementById('service')?.value || 'cut';
-      const serviceText = {
-        cut: "Cut & Style",
-        color: "Color Refresh",
-        treatment: "Signature Treatment",
-        event: "Bridal & Event Glam",
-        extensions: "Extensions Consultation"
-      }[service] || "Service";
-
-      const note = document.getElementById('formNote');
-      if (note) {
-        note.textContent = `Thanks, ${name}! Your request for “${serviceText}” has been saved locally (demo). We’ll confirm your time shortly.`;
-      }
-
-      // Gentle feedback: scroll to top of booking card
-      bookingForm.scrollIntoView({ behavior:'smooth', block:'center' });
-    });
-
-    // Footer year
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
