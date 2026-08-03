@@ -1,12 +1,4 @@
-// header goes solid after leaving hero
-  const header = document.getElementById('site-header');
-  const hero = document.querySelector('.hero');
-  const heroObserver = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{ header.classList.toggle('on-hero', e.isIntersecting); });
-  }, {threshold:0.6});
-  heroObserver.observe(hero);
-
-  // reveal on scroll
+// reveal on scroll
   const reveals = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
@@ -20,5 +12,5 @@
     const open = links.style.display === 'flex';
     links.style.display = open ? 'none' : 'flex';
     links.style.cssText += open ? '' : 'position:absolute;top:66px;left:0;right:0;background:#fbf6f1;flex-direction:column;padding:24px 32px;gap:20px;border-bottom:1px solid #e4d7cd;';
-    document.querySelectorAll('.nav-links a').forEach(a=>a.style.color = '#2b231f');
+    document.querySelectorAll('.nav-links a').forEach(a=>a.style.color = '#000');
   });
