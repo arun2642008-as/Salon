@@ -6,7 +6,7 @@
     --rosewood-deep:#511d29;
     --blush:#e7b9b6;
     --gold:#b9925a;
-    --charcoal:#2b231f;
+    --charcoal:#000000;
     --muted:#8a7b73;
     --line:#e4d7cd;
     --max:1180px;
@@ -48,13 +48,11 @@
   .btn-light:hover{background:#fff;color:var(--charcoal);}
 
   /* ---------- nav ---------- */
-  header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(251,246,241,0.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
-  header.on-hero{background:transparent;border-bottom-color:transparent;}
+  header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(251,246,241,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);}
   nav{max-width:var(--max);margin:0 auto;padding:22px 32px;display:flex;align-items:center;justify-content:space-between;}
-  .logo{font-family:'Cormorant Garamond',serif;font-size:26px;letter-spacing:0.12em;text-transform:uppercase;color:var(--charcoal);}
-  header.on-hero .logo, header.on-hero .nav-links a{color:#fff;}
+  .logo{font-family:'Cormorant Garamond',serif;font-size:26px;letter-spacing:0.12em;text-transform:uppercase;color:#000;}
   .nav-links{display:flex;gap:34px;list-style:none;}
-  .nav-links a{font-size:13px;letter-spacing:0.05em;text-transform:uppercase;color:var(--charcoal);position:relative;padding-bottom:4px;transition:opacity 0.25s;}
+  .nav-links a{font-size:13px;letter-spacing:0.05em;text-transform:uppercase;color:#000;position:relative;padding-bottom:4px;transition:opacity 0.25s;}
   .nav-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--gold);transition:width 0.3s;}
   .nav-links a:hover::after{width:100%;}
   .menu-toggle{display:none;background:none;border:none;font-size:24px;cursor:pointer;color:inherit;}
